@@ -37,7 +37,7 @@ class User {
       updated: DateTime.tryParse(json["updated"] ?? ""),
       collectionId: json["collectionId"],
       collectionName: json["collectionName"],
-      avatar: json["avatar"],
+      avatar: json  ["avatar"],
       email: json["email"],
       emailVisibility: json["emailVisibility"],
       name: json["name"],

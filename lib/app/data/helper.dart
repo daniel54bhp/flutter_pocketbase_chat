@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pocketbase/pocketbase.dart';
 
 /// Extensions
@@ -49,4 +52,47 @@ void showSuccessSnackbar(String message) {
       duration: const Duration(seconds: 2),
     ),
   );
+}
+
+void mainDialogBottom(BuildContext context, childWidget) {
+  showGeneralDialog(
+    barrierLabel: "Barrier",
+    barrierDismissible: true,
+    barrierColor: Colors.black.withOpacity(0.5),
+    transitionDuration: const Duration(milliseconds: 400),
+    context: context,
+    pageBuilder: (_, __, ___) {
+      return Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+          height: 130.0,
+          width: Get.width,
+          child: Material(
+            child: childWidget,
+          ),
+          decoration: const BoxDecoration(color: Colors.white),
+        ),
+      );
+    },
+    transitionBuilder: (_, anim, __, child) {
+      return SlideTransition(
+        position: Tween(begin: const Offset(0, 1), end: const Offset(0, 0))
+            .animate(anim),
+        child: child,
+      );
+    },
+  );
+}
+
+Future<File?> getImage({required ImageSource type}) async {
+  final ImagePicker picker = ImagePicker();
+  late XFile? file;
+  file = await picker.pickImage(source: type);
+
+  if (file != null) {
+    return File(file.path);
+  }
+
+  return null;
 }

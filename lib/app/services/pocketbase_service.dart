@@ -11,11 +11,18 @@ import 'package:pocketbase_chat/app/data/message_builder.dart';
 import 'package:pocketbase_chat/app/models/chat_room.dart';
 import 'package:pocketbase_chat/app/models/user.dart';
 import 'package:pocketbase_chat/app/services/storage_service.dart';
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:mime_type/mime_type.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+
+import 'dart:math' as Math;
+import 'package:image/image.dart' as Im;
 
 class PocketbaseService extends GetxService {
   static PocketbaseService get to => Get.find();
   // Replace with your pocketbase url
-  final _pocketBaseUrl = "http://192.168.1.36:8090";
+  final _pocketBaseUrl = "http://165.22.42.78:8090";
 
   late PocketBase _client;
   late AuthStore _authStore;
@@ -134,9 +141,10 @@ class PocketbaseService extends GetxService {
   /// Auth
   Future login(String email, String password) async {
     try {
-      RecordAuth userData =
+      RecordAuth userDataTemp =
           await _client.collection('users').authWithPassword(email, password);
-      return userData;
+
+      return userDataTemp;
     } on ClientException catch (e) {
       throw e.errorMessage;
     }
@@ -151,7 +159,9 @@ class PocketbaseService extends GetxService {
         "name": name,
         "emailVisibility": true,
       };
-      return await _client.collection('users').create(body: body);
+      final response = await _client.collection('users').create(body: body);
+
+      return response;
     } on ClientException catch (e) {
       throw e.errorMessage;
     }
@@ -172,8 +182,21 @@ class PocketbaseService extends GetxService {
       }
       final result = await _client.collection('users').getOne(userId);
       var user = User.fromJson(result.toJson());
+
       _cachedUsersData[userId] = user;
       return user;
+    } on ClientException catch (e) {
+      Get.log(e.toString());
+      throw e.errorMessage;
+    }
+  }
+
+  Future<List<User>> getAllUsers() async {
+    try {
+      final result = await _client.collection('users').getList();
+      List<User> users =
+          result.items.map((e) => User.fromJson(e.toJson())).toList();
+      return users;
     } on ClientException catch (e) {
       Get.log(e.toString());
       throw e.errorMessage;

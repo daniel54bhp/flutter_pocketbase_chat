@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:pocketbase_chat/app/bindings/new_room_binding.dart';
+import 'package:pocketbase_chat/app/modules/new_room/new_room_view.dart';
 
 import '../bindings/dashboard_binding.dart';
 import '../bindings/login_binding.dart';
@@ -27,6 +29,11 @@ class AppPages {
       name: _Paths.CHATTING,
       page: () => const ChattingView(),
       binding: ChattingBinding(),
+    ),
+    GetPage(
+      name: _Paths.NEWROOM,
+      page: () => const NewRoomView(),
+      binding: NewRoomBinding(),
     ),
   ];
 }
