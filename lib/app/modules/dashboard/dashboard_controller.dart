@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:io' show File;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -132,7 +132,7 @@ class DashboardController extends GetxController
     try {
       User? user = PocketbaseService.to.user;
       final response = await PocketbaseService.to.addRoomThowUsers(
-        room: 'Chat con ${user!.id.toString()} y $idToUser',
+        room: 'Chat con ${user!.name.toString()} y $idToUser',
         toUserId: idToUser,
         userId: user.id.toString(),
       );

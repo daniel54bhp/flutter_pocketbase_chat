@@ -6,6 +6,7 @@ import 'package:chatview/chatview.dart';
 import 'package:intl/intl.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:pocketbase_chat/app/services/pocketbase_service.dart';
+import 'package:path_provider/path_provider.dart';
 
 class MessageBuilder {
   /// Parse message object to save in pocketbase
@@ -101,5 +102,12 @@ class MessageBuilder {
     int? duration = durationData;
     if (duration == null) return null;
     return Duration(milliseconds: duration);
+  }
+}
+
+class FileHelper {
+  static Future<String> getTemporaryPath() async {
+    final directory = await getTemporaryDirectory();
+    return directory.path;
   }
 }

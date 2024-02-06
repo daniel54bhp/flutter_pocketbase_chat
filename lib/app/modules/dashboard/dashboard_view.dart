@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:chatview/chatview.dart';
@@ -10,6 +11,8 @@ import 'package:pocketbase_chat/app/models/user.dart';
 import 'package:pocketbase_chat/app/routes/app_pages.dart';
 import '../../services/pocketbase_service.dart';
 import 'dashboard_controller.dart';
+
+Timer? _timer;
 
 class DashboardView extends GetView<DashboardController> {
   const DashboardView({Key? key}) : super(key: key);
@@ -25,7 +28,7 @@ class DashboardView extends GetView<DashboardController> {
                 appBar: AppBar(
                   title: const Text('Usuarios'),
                   centerTitle: true,
-                  backgroundColor: Colors.black,
+                  backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                   leading: IconButton(
                     onPressed: controller.loadUsers,
                     icon: const Icon(Icons.refresh),
@@ -75,7 +78,7 @@ class DashboardView extends GetView<DashboardController> {
                 appBar: AppBar(
                   title: const Text('Salas'),
                   centerTitle: true,
-                  backgroundColor: Colors.black,
+                  backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                   leading: IconButton(
                     onPressed: controller.loadRooms,
                     icon: const Icon(Icons.refresh),
@@ -122,7 +125,7 @@ class DashboardView extends GetView<DashboardController> {
                   appBar: AppBar(
                     title: const Text('Perfil'),
                     centerTitle: true,
-                    backgroundColor: Colors.black,
+                    backgroundColor: const Color.fromARGB(255, 255, 255, 255),
                     leading: IconButton(
                       onPressed: controller.loadRooms,
                       icon: const Icon(Icons.refresh),
@@ -171,7 +174,7 @@ class DashboardView extends GetView<DashboardController> {
                                 ],
                               )),
                           child: CircleAvatar(
-                              radius: 70.0,
+                              radius: 1.0,
                               backgroundImage:
                                   NetworkImage(controller.photo.toString())),
                         ),
@@ -196,7 +199,7 @@ class DashboardView extends GetView<DashboardController> {
             child: Container(
               decoration: const BoxDecoration(color: Colors.black, boxShadow: [
                 BoxShadow(
-                    blurRadius: 20.0, color: Color.fromARGB(133, 87, 86, 86))
+                    blurRadius: 20.0, color: Color.fromARGB(255, 197, 189, 189))
               ]),
               child: TabBar(
                   controller: controller.tabController,
@@ -245,13 +248,13 @@ class LastMessageBuilder extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         List<Message> messages = snapshot.data;
         if (messages.isEmpty) {
-          return const Text("No messages");
+          return const Text("No hay mensajes");
         }
         Message message = messages.first;
         if (message.messageType == MessageType.image) {
-          return Text("Image message from : ${message.sendBy}");
+          return Text("Imagen de: ${message.sendBy}");
         } else if (message.messageType == MessageType.voice) {
-          return Text("voice message from : ${message.sendBy}");
+          return Text("Mensaje de voz de: ${message.sendBy}");
         }
         return Text(message.message);
       },

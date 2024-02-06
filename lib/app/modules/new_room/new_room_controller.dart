@@ -7,10 +7,14 @@ import 'package:pocketbase_chat/app/services/pocketbase_service.dart';
 
 class NewRoomController extends GetxController {
   List<User> users = <User>[].obs;
+  List<User> usersSearch = <User>[].obs;
+
   RxMap<dynamic, dynamic> usersSelect = {}.obs;
   TextEditingController nameRoomController = TextEditingController();
+  TextEditingController nameSearchController = TextEditingController();
 
   RxBool isLoading = false.obs;
+  RxBool isSearch = false.obs;
 
   @override
   void onInit() {
@@ -28,6 +32,28 @@ class NewRoomController extends GetxController {
       Get.log('GotError : $e');
       showErrorSnackbar(e.toString());
     }
+  }
+
+  Future<void> searchUser({required String textSearch}) async {
+    isLoading.value = true;
+    try {
+      isSearch.value = true;
+      usersSearch =
+          await PocketbaseService.to.getUserByName(textSearch: textSearch);
+      print(usersSearch.length);
+      print(isSearch.value);
+
+      isLoading.value = false;
+    } catch (e) {
+      isLoading.value = false;
+      Get.log('GotError : $e');
+      showErrorSnackbar('Sin resultados');
+    }
+  }
+
+  Future<void> closeSearch() async {
+    isSearch.value = false;
+    nameSearchController.text = '';
   }
 
   void selectUser({required String idUser}) {

@@ -1,3 +1,6 @@
+import 'dart:core';
+import 'dart:typed_data';
+
 import 'package:chatview/chatview.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -5,7 +8,8 @@ import 'package:pocketbase/pocketbase.dart';
 import 'package:pocketbase_chat/app/models/chat_room.dart';
 import 'package:pocketbase_chat/app/models/user.dart';
 import 'package:pocketbase_chat/app/services/pocketbase_service.dart';
-
+import 'dart:io';
+import 'package:pocketbase/pocketbase.dart';
 import '../../data/helper.dart';
 
 class ChattingController extends GetxController {
@@ -17,9 +21,9 @@ class ChattingController extends GetxController {
 
   @override
   void onInit() {
-    (ChatRoom, User) args = Get.arguments;
-    chatsRoom = args.$1;
-    User chatUser = args.$2;
+    final args = Get.arguments;
+    chatsRoom = args[0];
+    User chatUser = args[1];
     _subscribeToChats();
     _initializeChatController(chatUser);
     loadChats();

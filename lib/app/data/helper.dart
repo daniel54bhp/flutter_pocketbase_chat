@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pocketbase/pocketbase.dart';
+import 'package:file_picker/file_picker.dart';
 
 /// Extensions
 extension ClientExceptionExtension on ClientException {
@@ -92,6 +93,17 @@ Future<File?> getImage({required ImageSource type}) async {
 
   if (file != null) {
     return File(file.path);
+  }
+
+  return null;
+}
+
+Future<File?> getFile() async {
+  FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+  if (result != null) {
+    File file = File(result.files.first.path!);
+    return file;
   }
 
   return null;
